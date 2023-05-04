@@ -26,20 +26,17 @@ const Form = () => {
       subject: Yup.string(),
       message: Yup.string().required(),
     }),
-    onSubmit: async (values, resetForm) => {
+    onSubmit: async (values, helpers) => {
       setSubmitted(true);
       setLoading(true);
       const id = nanoid();
-      console.log(id);
       const valuesWithId = { ...values, id };
-      console.log(valuesWithId);
-      // http(valuesWithId)
       const response = await http.makePost("POST", valuesWithId);
       if (response.id) {
         setLoading(false);
       }
-      resetForm({})
-    setTimeout(()=>{
+      helpers.resetForm(formik.initialValues)
+      setTimeout(()=>{
         setSubmitted(false);
 
     }, 5000)
@@ -48,13 +45,14 @@ const Form = () => {
   });
   return (
     <div className="form_container">
+  
+      <form className="form" onSubmit={formik.handleSubmit}>
       {submitted && (
-        <div style={{ background: "green", display: "flex" }}>
+        <div style={{ background: "green", display: "flex" ,justifyContent: "space-between", padding: "10px"}}>
           <div className="white">Form submitted Successfully</div>{" "}
-          <button onClick={() => setSubmitted(false)}>*</button>
+         <div style={{display: "inline"}}> <button onClick={() => setSubmitted(false)}>*</button></div>
         </div>
       )}
-      <form className="form" onSubmit={formik.handleSubmit}>
         <div className="form-div">
           <label htmlFor="name">{firstLetterIncaps("NAME")}</label>
           <input
@@ -64,7 +62,7 @@ const Form = () => {
             onChange={formik.handleChange}
           />
           {formik.errors.name && formik.touched.name && (
-            <span>{formik.errors.name}</span>
+            <span className="danger">{formik.errors.name}</span>
           )}
         </div>
 
@@ -78,7 +76,7 @@ const Form = () => {
             onChange={formik.handleChange}
           />
           {formik.errors.email && formik.touched.email && (
-            <span>{formik.errors.email}</span>
+            <span className="danger">{formik.errors.email}</span>
           )}
         </div>
         <div className="form-div">
@@ -98,11 +96,11 @@ const Form = () => {
             onChange={formik.handleChange}
           ></textarea>
           {formik.errors.message && formik.touched.message && (
-            <span>{formik.errors.message}</span>
+            <span className="danger">{formik.errors.message}</span>
           )}
         </div>
 <div className="contact_button">
-<button  type="submit">Submit</button>
+<button disabled={loading} type="submit">Submit</button>
 
 </div>
       </form>

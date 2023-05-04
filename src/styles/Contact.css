@@ -1,0 +1,13 @@
+.white{
+    color: white;
+  }
+  .tittle{
+    margin-bottom: 16px;
+  }
+  .subtitle{
+    max-width: 70%;
+    margin: auto;
+  }
+  .danger{
+    color: red;
+  }
